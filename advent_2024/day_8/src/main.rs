@@ -32,6 +32,8 @@ fn main() {
     stations
   }); 
 
+  // an Antinode is a position whose distance is the same as the distance to the opposite station, and each antinode.
+  // This comes out to being all points equidistant on the line drawn between both stations
   for coords in stations.values() {
     for index in 0..coords.len() - 1 {
       let coord_1 = coords[index];

@@ -19,6 +19,7 @@ fn main() {
 
   let map: Grid<u8> = Grid::from_iter(rawdata.lines().map(|line| line.chars().map(|c| c.to_string().parse().unwrap()).collect()));
 
+  // Follow a heightmap around, creating trails that increment by 1 Height
   let trailhead_score = rawdata.match_indices('0').fold(0, |acc, (index, _)| {
     let mut coords = vec![Coordinate::index_to_coord(index as isize, map.width() as isize + 1)];
     for value in 1u8..=9 {
@@ -40,6 +41,7 @@ fn main() {
     acc + coords.len()
   });
 
+  // Do the same, but this time, the rating is all possible trails from a given trailhead
   let trailhead_rating = rawdata.match_indices('0').fold(0, |acc, (index, _)| {
     let mut coords = vec![Coordinate::index_to_coord(index as isize, map.width() as isize + 1)];
     for value in 1u8..=9 {

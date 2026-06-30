@@ -42,6 +42,7 @@ fn main() {
   
   let walk_map = |pos: &(isize, isize), direction| { walk(pos.clone(), direction, (width, height), &obstacles) };
 
+  // Track the guard's movement in the building.
   while (guard_coord.0.clamp(1, width - 2) == guard_coord.0) && (guard_coord.1.clamp(1, height - 2 as isize) == guard_coord.1) {
     for index in 0..CARDINALS.len() {
       let direction = &CARDINALS[index];
@@ -68,6 +69,7 @@ fn main() {
 
   println!("Covered Spaces: {}", cover_count);
 
+  // By moving 1 obstacle, how many loops can we create for the guard?
   for (start, end, dir_index) in path_steps.iter() {
     let check_dir = &CARDINALS[(*dir_index + 1) % CARDINALS.len()];
     for position in path_between(start, &(end.0 - CARDINALS[*dir_index].0, end.1 - CARDINALS[*dir_index].1)).iter() {
@@ -120,6 +122,7 @@ fn index_to_coord(index: usize, width: &usize) -> (isize, isize) {
   ((index % width).try_into().unwrap(), (index / width).try_into().unwrap())
 }
 
+// All points between 2 points. Must be axis aligned.
 fn path_between(start: &(isize, isize), end: &(isize, isize)) -> Vec<(isize, isize)> {
   if start.0 == end.0 {
     (start.1.min(end.1)..(start.1 + 1).max(end.1)).map(|pos| (start.0, pos)).collect()
@@ -130,6 +133,7 @@ fn path_between(start: &(isize, isize), end: &(isize, isize)) -> Vec<(isize, isi
   }
 }
 
+// Raycast on the map, checking for any entries that exist in coord_list
 fn scan_map<'a>(pos: &(isize, isize), dir: &(isize, isize), coord_list: &'a Vec<(isize, isize)>) -> Vec<&'a (isize, isize)> {
   coord_list.iter().filter(|item| {
     (item.1 == pos.1 && (item.0 - pos.0).signum() == dir.0.signum()) ||
@@ -137,6 +141,7 @@ fn scan_map<'a>(pos: &(isize, isize), dir: &(isize, isize), coord_list: &'a Vec<
   }).collect()
 }
 
+// Travel from starting position until hitting an obstacle, or the edge of the map
 fn walk(position: (isize, isize), direction: &(isize, isize), size: (isize, isize), obstacles: &Vec<(isize, isize)>) -> (isize, isize) {
   let obstacles_in_path = scan_map(&position, direction, obstacles);
   let hit_pos = obstacles_in_path.iter().min_by(|a, b| 

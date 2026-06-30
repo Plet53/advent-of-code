@@ -53,6 +53,7 @@ fn main() {
   println!("Incorrect Values: {}", incorrect_counter);
 }
 
+// Sort by arbitrary hashmap.
 fn order_to_rules(lhv: &str, rhv: &str, map: &HashMap<&str, Vec<&str>>) -> Ordering {
   match map.get(lhv) {
     Some(rule) => {

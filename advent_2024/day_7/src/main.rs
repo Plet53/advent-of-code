@@ -30,6 +30,7 @@ impl OperatorSet {
   }
 }
 
+// Iterate over all available operators
 impl Iterator for OperatorSet {
   type Item = Vec<OperatorType>;
 
@@ -70,6 +71,7 @@ fn main() {
     let figures: Vec<u64> = data.next().unwrap().split(' ').map(|val| val.parse::<u64>().unwrap()).collect();
     let mut ret_val = 0;
 
+    // bitmasking for 2 operator checking
     for mask in 0u64..2u64.pow(figures.len() as u32 - 1) {
       let mut combo = figures[0];
       for index in 0..(figures.len() as u64  - 1) {
@@ -98,6 +100,7 @@ fn main() {
     let figures: Vec<u64> = data.next().unwrap().split(' ').map(|val| val.parse::<u64>().unwrap()).collect();
     let mut ret_val = 0;
 
+    // full combo iterator for Concat
     for mask in OperatorSet::new(figures.len() - 1) {
       let mut combo = figures[0];
       for index in 0..(figures.len() - 1) {

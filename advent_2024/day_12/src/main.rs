@@ -34,6 +34,7 @@ fn main() {
     let mut next_coords: Vec<Coordinate> = Vec::new();
     let mut region: HashSet<Coordinate> = HashSet::from([coord]);
 
+    // Create sets of continuous regions
     loop {
       for coordinate in current_coords {
         for dir in CARDINALS {
@@ -64,6 +65,7 @@ fn main() {
       current_coords = next_coords.drain(..).collect();
     }
 
+    // Take those regions and get their perimeters
     let perimeter = get_perimeter(&region);
     let area = region.len() as u64;
     for coordinate in region.iter() {

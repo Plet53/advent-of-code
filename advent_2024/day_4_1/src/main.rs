@@ -1,6 +1,8 @@
 use std::fs;
 use std::env;
+// Word Searcher, but only for the word XMAS.
 
+// Written pre-coordinate and grid library
 const DIRECTIONS: [(i8, i8); 8] = [
   (1, 0),
   (0, 1),
@@ -35,6 +37,7 @@ fn main() {
   let mut line_counter = 0;
   let mut cross_counter = 0;
 
+  
   for i in 0..(search_area.len() as isize * search_area[0].len() as isize) {
     let c = search_area[(i / width) as usize][(i % width) as usize];
     if c == 'X' {
@@ -68,6 +71,10 @@ pub fn scan_area_line(index: isize, size: &(isize, isize), area: &Vec<Vec<char>>
   }).reduce(|acc, val| acc + val).unwrap()
 }
 
+// MXM
+// XAX
+// SAS
+// or any of its rotations
 pub fn scan_area_cross(index: isize, size: &(isize, isize), area: &Vec<Vec<char>>) -> u64 {
   let coord = index_to_coord(index, &size.0);
   if !(

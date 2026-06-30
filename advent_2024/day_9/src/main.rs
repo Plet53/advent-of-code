@@ -20,13 +20,14 @@ fn main() {
   day2(rawdata);
 }
 
+// Compact file map by fragmenting when needed.
 fn day1(data: String) {
   let initial_map = create_disk_map(data);
 
   println!("{:?}", initial_map);
 
   let mut spacers = initial_map.iter().filter(|(_, index)|index.is_none());
-  let mut files= initial_map.iter().filter(|(_, index)|index.is_some()).map(|(size, index)| (*size, index.unwrap()));
+  let mut files = initial_map.iter().filter(|(_, index)|index.is_some()).map(|(size, index)| (*size, index.unwrap()));
   let mut leftover_file: Option<(u8, usize)> = None;
   let mut compact_map: Vec<(u8, usize)> = Vec::new();
 
@@ -61,11 +62,13 @@ fn day1(data: String) {
           match file_to_compact {
             Some(file) => {
               match space.cmp(&file.0) {
+                // Fill existing space, leave some part
                 Ordering::Less => {
                   compact_map.push((space, file.1));
                   leftover_file = Some((file.0 - space, file.1));
                   space = 0;
                 },
+                // Fill space, track remainder.
                 Ordering::Equal | Ordering::Greater => {
                   compact_map.push(file);
                   space -= file.0;
@@ -97,6 +100,7 @@ fn day1(data: String) {
   println!("Fragmented Checksum: {}", checksum);
 }
 
+// Defragment disk. Group like files
 fn day2(data: String) {
   let initial_map = create_disk_map(data);
 
@@ -163,6 +167,8 @@ fn day2(data: String) {
   println!("Unfragmented Checksum: {}", checksum);
 }
 
+// Each file entry is a contiguous set of characters.
+// Tuple of Size and File Residence
 fn create_disk_map(data: String) -> Vec<(u8, Option<usize>)> {
   (0..((data.len() / 2) + data.len() % 2)).map(|index| {
     let file = index * 2;

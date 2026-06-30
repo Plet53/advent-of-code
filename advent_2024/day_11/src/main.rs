@@ -26,6 +26,8 @@ fn main() {
   println!("{}", blinks_75);
 }
 
+
+// Recursively iterate blinking stones, which have an odd formula. Keep a cached table of results.
 fn count_stones(value: u128, blinks: u32, result_lookup: &mut HashMap<(u128, u32), u128>) -> u128 {
   if blinks == 0 {
     1
@@ -35,11 +37,13 @@ fn count_stones(value: u128, blinks: u32, result_lookup: &mut HashMap<(u128, u32
       None => {
         let result = match value {
           0 => count_stones(1, blinks - 1, result_lookup),
+          // Number of digits is Odd.
           value if value.ilog10() % 2 == 1 => {
             let split_value = 10u128.pow((value.ilog10() + 1) / 2);
             count_stones(value / split_value, blinks - 1, result_lookup) +
             count_stones(value % split_value, blinks - 1, result_lookup)
           },
+          // Number of digits is Even.
           value => count_stones(value * 2024, blinks - 1, result_lookup),
         };
         result_lookup.insert((value, blinks), result);
